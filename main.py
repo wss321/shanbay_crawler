@@ -4,16 +4,25 @@ import requests
 import lxml.html
 from pandas import DataFrame
 import argparse
-#
+
+
 # book = 'https://www.shanbay.com/wordbook/205946/' 核心词汇
 # """https://www.shanbay.com/wordbook/3/"""
+
+def str2bool(v):
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Unsupported value encountered.')
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="crawl shanbay")
     parser.add_argument("--u", help="vocabulary book url", type=str)
-    parser.add_argument("--o", help="output directory", default="", type=str)
-    parser.add_argument("--m", help="add meanings", default=True, type=bool)
+    parser.add_argument("--o", help="output directory", default=".", type=str)
+    parser.add_argument("--m", help="add meanings", default=True, type=str2bool)
     args = parser.parse_args()
     return args
 
@@ -54,5 +63,4 @@ if __name__ == '__main__':
                 df.to_csv(save_file, mode='a', index=False, header=False, encoding='utf_8_sig')
         # with open(save_file, 'a', encoding='utf_8_sig') as f:
         #     f.write('\n\n')
-
     print('Done. Saved to {}'.format(save_file))
